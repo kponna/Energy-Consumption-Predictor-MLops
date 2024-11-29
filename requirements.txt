@@ -3,3 +3,4 @@ pymongo
 pandas
 numpy
 seaborn
+python-dotenv

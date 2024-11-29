@@ -1,1 +1,1 @@
-# Energy-Consumption-Predictor-MLops
+# Energy-Generation-Predictor-MLops
