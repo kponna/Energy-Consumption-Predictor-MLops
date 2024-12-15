@@ -8,8 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Get API key and MongoDB connection string from .env file
-api_key = os.getenv("API_KEY")
-mongo_uri = os.getenv("MONGO_URI")  
+api_key = os.getenv("API_KEY") 
 
 # API URL
 url = f"https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?api_key={api_key}"
@@ -17,7 +16,7 @@ url = f"https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?api_key={api
 # Define the CSV file path
 output_dir = "dataset"
 os.makedirs(output_dir, exist_ok=True)  # Create the directory if it doesn't exist
-csv_file_name = os.path.join(output_dir, "energy_generated.csv")
+csv_file_name = os.path.join(output_dir,"energy_generated.csv")
 
 # Initialize list to store all records
 all_records = []
@@ -42,8 +41,8 @@ def fetch_data():
                         "WAT"
                     ]
                 },
-                "start": "2019-01-01T00",
-                "end": "2024-11-01T00",
+                "start": "2022-01-01T00",
+                "end": "2024-12-01T00",
                 "sort": [
                     {
                         "column": "period",

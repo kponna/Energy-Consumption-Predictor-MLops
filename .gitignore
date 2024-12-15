@@ -1,2 +1,4 @@
 energy
 .env
+__pycache__
+logs
