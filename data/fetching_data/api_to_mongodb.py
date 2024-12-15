@@ -131,11 +131,11 @@ class EnergyDataExtract():
         except Exception as e: 
             raise EnergyGenerationException(e, sys)
 
-
 if __name__ == "__main__":
+
     energy_data_obj = EnergyDataExtract()
+    energy_data_obj.fetch_and_store_in_mongodb() 
     
     # Uncomment to clear the collection before fetching data
     # energy_data_obj.clear_collection()
     
-    energy_data_obj.fetch_and_store_in_mongodb() 
