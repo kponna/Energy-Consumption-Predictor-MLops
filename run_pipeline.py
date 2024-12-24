@@ -1,3 +1,4 @@
+# from energygeneration.source.data_ingestion0 import DataIngestion
 from energygeneration.source.data_ingestion import DataIngestion
 from energygeneration.exception_handling.exception import EnergyGenerationException
 from energygeneration.logging.logger import logging
@@ -11,7 +12,7 @@ if __name__ == "__main__":
         training_pipeline_config = TrainingPipelineConfig()
         data_ingestion_config = DataIngestionConfig(training_pipeline_config)
         data_ingestion = DataIngestion(data_ingestion_config)
-
+        logging.info("Initiating Data Ingestion. ")
         # Perform data ingestion
         data_ingestion_artifact = data_ingestion.ingest_data()
         logging.info(f"Data ingestion completed.")

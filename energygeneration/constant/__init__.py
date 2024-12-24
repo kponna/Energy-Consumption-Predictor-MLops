@@ -12,8 +12,9 @@ PIPELINE_NAME: str = "EnergyGeneration"
 ARTIFACT_DIR: str = "Artifacts"
 FILE_NAME: str = "EnergyData.csv"
 
-# TRAIN_FILE_NAME: str = "train.csv"
-# TEST_FILE_NAME: str = "test.csv"
+TRAIN_FILE_NAME: str =  "train.csv"
+TEST_FILE_NAME: str = "test.csv"
+VALIDATION_FILE_NAME:str = "val.csv"
 
 # PREPROCESSING_OBJECT_FILE_NAME = "preprocessing.pkl"
 # MODEL_FILE_NAME = "model.pkl"
@@ -30,4 +31,9 @@ DATA_INGESTION_DATABASE_NAME: str = "eia_data"
 DATA_INGESTION_DIR_NAME: str = "data_ingestion"
 DATA_INGESTION_FEATURE_STORE_DIR: str = "feature_store"
 DATA_INGESTION_INGESTED_DIR: str = "ingested"
-DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO: float = 0.2
+##### DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO: float = 0.2
+
+# Constants for time series modeling
+WINDOW_SIZE: int = 19  # Default window size for time series data
+TRAIN_VAL_TEST_SPLIT_RATIO: float = 0.7  # 70% of data for training
+VALIDATION_SPLIT_RATIO: float = 0.4  # 40% of the remaining data for validation

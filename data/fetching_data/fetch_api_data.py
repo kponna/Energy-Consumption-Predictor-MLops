@@ -16,7 +16,7 @@ url = f"https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?api_key={api
 # Define the CSV file path
 output_dir = "data/dataset"
 os.makedirs(output_dir, exist_ok=True)  # Create the directory if it doesn't exist
-csv_file_name = os.path.join(output_dir, "energy_generated_data.csv")
+csv_file_name = os.path.join(output_dir, "EnergyData.csv")
 
 # Initialize list to store all records
 all_records = []
