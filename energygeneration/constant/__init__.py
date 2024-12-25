@@ -19,6 +19,10 @@ VALIDATION_FILE_NAME:str = "val.csv"
 # PREPROCESSING_OBJECT_FILE_NAME = "preprocessing.pkl"
 # MODEL_FILE_NAME = "model.pkl"
 # SCHEMA_FILE_PATH = os.path.join("data_schema", "schema.yaml")
+# Get the absolute path of the current working directory 
+# /home/karthikponna/kittu/Energy generation prediction project/Energy-Generation-Predictor-MLops/energygeneration/data_schema/schema.yaml
+# Construct the absolute path to the schema.yaml file
+SCHEMA_FILE_PATH = os.path.join("data_schema", "schema.yaml")
 # SCHEMA_DROP_COLS = ["respondent-name", "type-name"]
 
 # SAVED_MODEL_DIR = os.path.join("saved_models")
@@ -37,3 +41,12 @@ DATA_INGESTION_INGESTED_DIR: str = "ingested"
 WINDOW_SIZE: int = 19  # Default window size for time series data
 TRAIN_VAL_TEST_SPLIT_RATIO: float = 0.7  # 70% of data for training
 VALIDATION_SPLIT_RATIO: float = 0.4  # 40% of the remaining data for validation
+
+"""
+Data Validation related constant start with DATA_VALIDATION VAR NAME
+"""
+DATA_VALIDATION_DIR_NAME:str= "data_validation"
+DATA_VALIDATION_VALID_DIR:str = "valid"
+DATA_VALIDATION_INVALID_DIR:str = "invalid"
+DATA_VALIDATION_DRIFT_REPORT_DIR:str = 'drift_report'
+DATA_VALIDATION_DRIFT_REPORT_FILE_NAME:str = 'report.yaml'

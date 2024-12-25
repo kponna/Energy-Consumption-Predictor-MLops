@@ -1,0 +1,10 @@
+columns:
+  - period: datetime64[ns]
+  - value: int64
+
+
+numerical_columns:
+  - value
+
+datetime_columns:
+  - period

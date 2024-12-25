@@ -13,4 +13,6 @@ statsmodels
 plotly
 nbformat
 tensorflow
+dill
+pyaml
 ##-e .
