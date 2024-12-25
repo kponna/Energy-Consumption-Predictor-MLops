@@ -10,7 +10,7 @@ import pickle
 def read_yaml_file(file_path:str) ->dict:
     try:
         with open(file_path,"rb") as yaml_file:
-            print(f"Schema file path: {file_path}")
+            # print(f"Schema file path: {file_path}")
             return yaml.safe_load(yaml_file)
     except Exception as e:
         raise EnergyGenerationException(e,sys) from e

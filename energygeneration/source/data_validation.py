@@ -34,23 +34,54 @@ class DataValidation:
                 return True
         except Exception as e:
             raise EnergyGenerationException(e,sys)
-
-    def is_num_cols_exist(self,dataframe:pd.DataFrame):
+    
+    def is_column_exist(self, dataframe: pd.DataFrame) -> bool:
+        """
+        Validates the existence of numerical and datetime columns.
+        """
         try:
-            num_cols = self._schema_config['numerical_columns']
             dataframe_columns = dataframe.columns
-            num_col_exist = True
-            missing_num_cols = []
-            for num_col in num_cols:
-                if num_col not in dataframe_columns:
-                    num_col_exist = False
-                    missing_num_cols.append(num_col)
-            if missing_num_cols:
-                logging.info(f"Missing numerical columns: {missing_num_cols}")
-                return False
-            return num_col_exist
+            missing_numerical_columns = []
+            missing_datetime_columns = []
+
+            # Validate numerical columns
+            for column in self._schema_config["numerical_columns"]:
+                if column not in dataframe_columns:
+                    missing_numerical_columns.append(column)
+
+            if missing_numerical_columns:
+                logging.info(f"Missing numerical columns: {missing_numerical_columns}")
+
+            # Validate datetime columns
+            for column in self._schema_config["datetime_columns"]:
+                if column not in dataframe_columns:
+                    missing_datetime_columns.append(column)
+
+            if missing_datetime_columns:
+                logging.info(f"Missing datetime columns: {missing_datetime_columns}")
+
+            # Return False if any columns are missing
+            return len(missing_numerical_columns) == 0 and len(missing_datetime_columns) == 0
+
         except Exception as e:
-            raise EnergyGenerationException(e,sys)
+            raise EnergyGenerationException(e, sys)
+
+    # def is_num_cols_exist(self,dataframe:pd.DataFrame):
+    #     try:
+    #         num_cols = self._schema_config['numerical_columns']
+    #         dataframe_columns = dataframe.columns
+    #         num_col_exist = True
+    #         missing_num_cols = []
+    #         for num_col in num_cols:
+    #             if num_col not in dataframe_columns:
+    #                 num_col_exist = False
+    #                 missing_num_cols.append(num_col)
+    #         if missing_num_cols:
+    #             logging.info(f"Missing numerical columns: {missing_num_cols}")
+    #             return False
+    #         return num_col_exist
+    #     except Exception as e:
+    #         raise EnergyGenerationException(e,sys)
 
     def detect_data_drift(self, base_df, current_df, threshold= 0.05)->bool:
         try:
@@ -86,20 +117,7 @@ class DataValidation:
             train_dataframe = DataValidation.read_data(train_file_path)
             test_dataframe = DataValidation.read_data(test_file_path)
             val_dataframe = DataValidation.read_data(val_file_path)
-
-            # # Validate number of columns
-            # status = self.validate_no_of_cols(dataframe = train_dataframe)
-            # if not status:
-            #     error_message= f"Train dataframe does not contain all the columns.\n"
-            
-            # status = self.validate_no_of_cols(dataframe = test_dataframe)
-            # if not status:
-            #     error_message= f"Test dataframe does not contain all the columns.\n"
-
-            # status = self.validate_no_of_cols(dataframe = val_dataframe)
-            # if not status:
-            #     error_message= f"Validation dataframe does not contain all the columns.\n"
-
+ 
             # Validating columns
             error_message = ""
             if not self.validate_no_of_cols(train_dataframe):
@@ -108,16 +126,26 @@ class DataValidation:
                 error_message += "Test dataframe does not have required columns.\n"
             if not self.validate_no_of_cols(val_dataframe):
                 error_message += "Validation dataframe does not have required columns.\n"
-            
+             
+            # Validate existence of numerical and datetime columns
+            if not self.is_column_exist(train_dataframe):
+                error_message += "Train dataframe is missing required numerical or datetime columns.\n"
+            if not self.is_column_exist(test_dataframe):
+                error_message += "Test dataframe is missing required numerical or datetime columns.\n"
+            if not self.is_column_exist(val_dataframe):
+                error_message += "Validation dataframe is missing required numerical or datetime columns.\n"
+
             if error_message:
                 raise ValueError(error_message)
-            # Validating numerical columns
-            if not self.is_num_cols_exist(train_dataframe):
-                error_message += "Train dataframe is missing required numerical columns.\n"
-            if not self.is_num_cols_exist(test_dataframe):
-                error_message += "Test dataframe is missing required numerical columns.\n"
-            if not self.is_num_cols_exist(val_dataframe):
-                error_message += "Validation dataframe is missing required numerical columns.\n"
+            
+            # # Validating numerical columns
+            # if not self.is_num_cols_exist(train_dataframe):
+            #     error_message += "Train dataframe is missing required numerical columns.\n"
+            # if not self.is_num_cols_exist(test_dataframe):
+            #     error_message += "Test dataframe is missing required numerical columns.\n"
+            # if not self.is_num_cols_exist(val_dataframe):
+            #     error_message += "Validation dataframe is missing required numerical columns.\n"
+
             # check datadrift
             test_drift_status = self.detect_data_drift(base_df=train_dataframe,current_df=test_dataframe)
             print(f"Test drift status:{test_drift_status}")
@@ -127,21 +155,10 @@ class DataValidation:
             dir_path = os.path.dirname(self.data_validation_config.valid_train_file_path)
             os.makedirs(dir_path,exist_ok=True)
              
-            train_dataframe.to_csv(self.data_validation_config.valid_train_file_path,index = False, header=True)
-            test_dataframe.to_csv(self.data_validation_config.valid_test_file_path,index=False,header=True)
+            train_dataframe.to_csv(self.data_validation_config.valid_train_file_path,index=False, header=True)
+            test_dataframe.to_csv(self.data_validation_config.valid_test_file_path,index=False, header=True)
             val_dataframe.to_csv(self.data_validation_config.valid_val_file_path, index=False, header=True)
-             
-            # data_validation_artifact = DataValidationArtifact(
-            #     validation_status=status,
-            #     valid_train_file_path=self.data_ingestion_artifact.train_file_path
-            #     valid_test_file_path=self.data_ingestion_artifact.test_file_path
-            #     valid_val_file_path=self.data_ingestion_artifact.val_file_path
-            #     invalid_train_file_path=None,
-            #     invalid_test_file_path=None,
-            #     invalid_val_file_path=None,
-            #     drift_report_file_path=self.data_validation_config.drift_report_file_path,
-            # )
-            # Creating DataValidationArtifact
+              
             data_validation_artifact = DataValidationArtifact(
                 validation_status=drift_status,
                 valid_train_file_path=self.data_validation_config.valid_train_file_path,
@@ -151,10 +168,8 @@ class DataValidation:
                 invalid_test_file_path=None,
                 invalid_val_file_path=None,
                 drift_report_file_path=self.data_validation_config.drift_report_file_path
-            )
+            ) 
             return data_validation_artifact
         except Exception as e:
             raise EnergyGenerationException(e,sys)
-        
-    
-
+         
