@@ -64,24 +64,7 @@ class DataValidation:
             return len(missing_numerical_columns) == 0 and len(missing_datetime_columns) == 0
 
         except Exception as e:
-            raise EnergyGenerationException(e, sys)
-
-    # def is_num_cols_exist(self,dataframe:pd.DataFrame):
-    #     try:
-    #         num_cols = self._schema_config['numerical_columns']
-    #         dataframe_columns = dataframe.columns
-    #         num_col_exist = True
-    #         missing_num_cols = []
-    #         for num_col in num_cols:
-    #             if num_col not in dataframe_columns:
-    #                 num_col_exist = False
-    #                 missing_num_cols.append(num_col)
-    #         if missing_num_cols:
-    #             logging.info(f"Missing numerical columns: {missing_num_cols}")
-    #             return False
-    #         return num_col_exist
-    #     except Exception as e:
-    #         raise EnergyGenerationException(e,sys)
+            raise EnergyGenerationException(e, sys) 
 
     def detect_data_drift(self, base_df, current_df, threshold= 0.05)->bool:
         try:
@@ -136,15 +119,7 @@ class DataValidation:
                 error_message += "Validation dataframe is missing required numerical or datetime columns.\n"
 
             if error_message:
-                raise ValueError(error_message)
-            
-            # # Validating numerical columns
-            # if not self.is_num_cols_exist(train_dataframe):
-            #     error_message += "Train dataframe is missing required numerical columns.\n"
-            # if not self.is_num_cols_exist(test_dataframe):
-            #     error_message += "Test dataframe is missing required numerical columns.\n"
-            # if not self.is_num_cols_exist(val_dataframe):
-            #     error_message += "Validation dataframe is missing required numerical columns.\n"
+                raise ValueError(error_message) 
 
             # check datadrift
             test_drift_status = self.detect_data_drift(base_df=train_dataframe,current_df=test_dataframe)
