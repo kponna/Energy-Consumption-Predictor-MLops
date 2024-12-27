@@ -18,7 +18,7 @@ class DataIngestionConfig:
         self.testing_file_path: str = os.path.join(self.data_ingestion_dir, DATA_INGESTION_INGESTED_DIR, TEST_FILE_NAME)
         self.validation_file_path :str = os.path.join(self.data_ingestion_dir, DATA_INGESTION_INGESTED_DIR, VALIDATION_FILE_NAME)
         self.train_val_test_split_ratio: float = TRAIN_VAL_TEST_SPLIT_RATIO
-        self.window_size:int = WINDOW_SIZE
+        self.time_steps:int = TIME_STEPS
         self.validation_split_ratio = VALIDATION_SPLIT_RATIO
         self.collection_name: str = DATA_INGESTION_COLLECTION_NAME
         self.database_name: str = DATA_INGESTION_DATABASE_NAME
@@ -36,3 +36,13 @@ class DataValidationConfig:
         self.invalid_val_file_path:str = os.path.join(self.invalid_data_dir,VALIDATION_FILE_NAME)
         self.drift_report_file_path:str = os.path.join(self.data_validaton_dir,DATA_VALIDATION_DRIFT_REPORT_DIR,DATA_VALIDATION_DRIFT_REPORT_FILE_NAME)
         
+class DataTransformationConfig:
+    def __init__(self,training_pipeline_config:TrainingPipelineConfig):
+        self.data_transformation_dir:str = os.path.join(training_pipeline_config.artifact_dir,DATA_TRANSFORMATION_DIR)
+        self.transformed_X_train_file_path:str = os.path.join(self.data_transformation_dir,DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,TRAIN_FEATURE_FILE_NAME )
+        self.transformed_X_test_file_path:str = os.path.join(self.data_transformation_dir,DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,TEST_FEATURE_FILE_NAME )
+        self.transformed_X_val_file_path:str = os.path.join(self.data_transformation_dir,DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,VAL_FEATURE_FILE_NAME )
+        self.transformed_y_train_file_path:str = os.path.join(self.data_transformation_dir,DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,TRAIN_TARGET_FILE_NAME )
+        self.transformed_y_test_file_path:str = os.path.join(self.data_transformation_dir,DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,TEST_TARGET_FILE_NAME )
+        self.transformed_y_val_file_path:str = os.path.join(self.data_transformation_dir,DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR,VAL_TARGET_FILE_NAME )
+        self.transformed_object_file_path: str = os.path.join( self.data_transformation_dir, DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR,PREPROCESSING_OBJECT_FILE_NAME,)

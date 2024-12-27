@@ -5,14 +5,12 @@ numpy
 seaborn
 certifi
 python-dotenv
-pymongo[srv]==3.6
-pymongo
+pymongo[srv]==3.6 
 scikit-learn
 matplotlib
 statsmodels
 plotly
 nbformat
-tensorflow
-dill
+tensorflow 
 pyaml
 ##-e .

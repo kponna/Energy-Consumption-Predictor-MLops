@@ -8,3 +8,30 @@ numerical_columns:
 
 datetime_columns:
   - period
+
+cyclic_features:
+  timestamp_column: "Seconds"
+  datetime_column: "Datetime"
+  input_column: "period"
+  day_features:
+    - "Day sin"
+    - "Day cos"
+  year_features:
+    - "Year sin"
+    - "Year cos"
+  hour_features:
+    - "Hour sin"
+    - "Hour cos"
+  minute_features:
+    - "Minute sin"
+    - "Minute cos"
+  month_features:
+    - "Month sin"
+    - "Month cos"
+drop_columns:
+  - "Seconds"
+  - "Hour"
+  - "Minute"
+  - "Month"
+  - "Datetime"
+  - "period"
