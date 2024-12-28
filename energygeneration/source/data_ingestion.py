@@ -1,7 +1,6 @@
 from energygeneration.exception_handling.exception import EnergyGenerationException
 from energygeneration.logging.logger import logging
-from energygeneration.entity.artifact_entity import DataIngestionArtifact
-from energygeneration.entity.config_entity import TrainingPipelineConfig
+from energygeneration.entity.artifact_entity import DataIngestionArtifact 
 
 ## Configuration of Data Ingestion Config 
 from energygeneration.entity.config_entity import DataIngestionConfig
@@ -38,7 +37,7 @@ class DataIngestion:
 
             # Check if all columns in 'cols' are in the DataFrame columns
             if set(cols).issubset(df.columns):
-                df.drop(columns=cols, inplace=True)  # Drop the columns
+                df.drop(columns=cols, inplace=True)  
 
             df.replace({"na":np.nan},inplace = True)
             # Ensure the "period" column is parsed as dates and set as the index
@@ -64,29 +63,6 @@ class DataIngestion:
             return dataframe
         except Exception as e:
             raise EnergyGenerationException(e,sys)
-  
-    def df_to_X_y(self, dataframe: pd.DataFrame):
-        """
-        Converts a DataFrame into X and y datasets for time series modeling.
-        """
-        try:
-            window_size = self.data_ingestion_config.window_size
-            df_as_np = dataframe.to_numpy()
-            X = []
-            y = []
-
-            for i in range(len(df_as_np) - window_size):
-                # Use all columns for X
-                row = df_as_np[i:i + window_size]
-                X.append(row)
-                # Only use the target column ('value') for y
-                label = df_as_np[i + window_size][0]
-                y.append(label)
-
-            return np.array(X), np.array(y)
-        except Exception as e:
-            raise EnergyGenerationException(e, sys)
-
     
     def train_val_test_split(self, dataframe: pd.DataFrame):
         """
@@ -98,13 +74,17 @@ class DataIngestion:
             # Calculate split indices
             total_samples = len(dataframe)
             train_size = int(total_samples * self.data_ingestion_config.train_val_test_split_ratio)
-            val_size = int((total_samples - train_size) * self.data_ingestion_config.validation_split_ratio)
-
+            remaining_size = total_samples - train_size  # Remaining 30%
+            val_size = int(remaining_size * self.data_ingestion_config.validation_split_ratio)  # Validation is 40% of the remaining 30%
+ 
             # Perform the splits
             train_set = dataframe[:train_size]
             val_set = dataframe[train_size:train_size + val_size]
             test_set = dataframe[train_size + val_size:]
-
+            # Reset indices for train, validation, and test sets
+            train_set = train_set.reset_index(drop=True)
+            val_set = val_set.reset_index(drop=True)
+            test_set = test_set.reset_index(drop=True)
             logging.info("Completed splitting the data into train, validation, and test sets.")
  
             dir_path = os.path.dirname(self.data_ingestion_config.training_file_path)

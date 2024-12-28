@@ -26,3 +26,17 @@ class DataTransformationArtifact:
     transformed_y_train_file_path:str
     transformed_y_test_file_path:str    
     transformed_y_val_file_path:str
+
+@dataclass
+class RegressionMetricArtifact:
+    mae: float
+    mse: float
+    rmse: float
+    r2: float
+
+@dataclass
+class ModelTrainerArtifact:
+    trained_model_file_path:str
+    train_metric_artifact: RegressionMetricArtifact
+    test_metric_artifact: RegressionMetricArtifact
+    val_metric_artifact: RegressionMetricArtifact

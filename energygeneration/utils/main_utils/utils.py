@@ -1,6 +1,7 @@
 import yaml
 from energygeneration.exception_handling.exception import EnergyGenerationException
 from energygeneration.logging.logger import logging
+from sklearn.metrics import mean_absolute_error,mean_squared_error,root_mean_squared_error,r2_score
 from datetime import timedelta 
 import os,sys
 import numpy as np
@@ -44,6 +45,17 @@ def save_numpy_array_data(file_path:str,array:np.array):
     except Exception as e:
         raise EnergyGenerationException(e,sys) from e
 
+def load_numpy_array_data(file_path:str)-> np.array: 
+    """
+    load numpy array data from file
+    file_path: str location of file to load
+    return: np.array data loaded"""
+    try:
+        with open(file_path,"rb") as file_obj:
+            return np.load(file_obj)
+    except Exception as e:
+        raise EnergyGenerationException(e,sys) from e
+    
 def save_object(file_path:str,obj:object)-> None: 
     try:
         logging.info("Entered the save_object method of Main utils class")
@@ -53,7 +65,16 @@ def save_object(file_path:str,obj:object)-> None:
         logging.info("Completed saving the scaling object.")
     except Exception as e:
         raise EnergyGenerationException(e,sys) from e
-     
+
+def load_object(file_path:str,)-> object:
+    try:
+        if not os.path.exists(file_path):
+            raise Exception(f"The file: {file_path} is not exists")
+        with open(file_path,"rb") as file_obj:
+            print(file_obj)
+            return pickle.load(file_obj)
+    except Exception as e:
+        raise EnergyGenerationException(e,sys) from e
 def add_cyclic_features(data: pd.DataFrame, schema_file: str) -> pd.DataFrame: 
     try:
         schema = read_yaml_file(schema_file)
@@ -110,21 +131,17 @@ def add_cyclic_features(data: pd.DataFrame, schema_file: str) -> pd.DataFrame:
         raise EnergyGenerationException(e, sys) from e
 
  
-
-def df_to_X_y(df, time_steps=24):  
+def df_to_X_y(df, time_steps=12):
     df_as_np = df.to_numpy()
     X = []
     y = []
-    
     for i in range(len(df_as_np) - time_steps):
-        # Use all columns except the target ('value') for X
-        row = df_as_np[i:i + time_steps, :-1]  # All rows in the window, all columns except last
+        # Select the window of rows as input
+        row = df_as_np[i:i+time_steps]
         X.append(row)
-        
-        # Use only the target column ('value') for y
-        label = df_as_np[i + time_steps, -1]  # Target value from the last column
-        y.append(label) 
-    
+        # Select the target (value column)
+        label = df_as_np[i+time_steps][0] 
+        y.append(label)
     # Convert to NumPy arrays
     X = np.array(X)
     y = np.array(y)
@@ -135,21 +152,9 @@ def df_to_X_y(df, time_steps=24):
     logging.info(X[:2])  # Print first 5 samples of X
     logging.info("\nFirst 2 samples of y:")
     logging.info(y[:2])  # Print first 5 samples of y
-    
-    return X, y
-
-def scale_and_save_target(scaler, target_df, scaler_file_path):
-    """
-    Scales the target features using the provided scaler and saves the scaler object.
-
-    Args:
-        scaler: Scaler object (e.g., MinMaxScaler) to use for scaling.
-        target_df (pd.DataFrame): DataFrame containing the target features to scale.
-        scaler_file_path (str): Path to save the scaler object.
-
-    Returns:
-        np.ndarray: Scaled target features as a NumPy array.
-    """
+    return X,y
+  
+def scale_and_save_target(scaler, target_df, scaler_file_path): 
     try:
         logging.info("Entered the scale_and_save_target method of utils.")
         
@@ -165,3 +170,33 @@ def scale_and_save_target(scaler, target_df, scaler_file_path):
         return scaled_target
     except Exception as e:
         raise EnergyGenerationException(e, sys) from e
+
+# def evaluate_model(model, X_test, y_test, scaler,file_path): 
+#     try:
+#         predictions = model.predict(X_test).flatten()
+#         predictions_rescaled = scaler.inverse_transform(predictions.reshape(-1, 1)).flatten()
+#         actuals_rescaled = scaler.inverse_transform(y_test.reshape(-1, 1)).flatten()
+
+#         results_df = pd.DataFrame({
+#             'Predictions': predictions_rescaled,
+#             'Actuals': actuals_rescaled
+#         })
+
+#         mae = mean_absolute_error(actuals_rescaled, predictions_rescaled)
+#         mse = mean_squared_error(actuals_rescaled, predictions_rescaled)
+#         rmse = np.sqrt(mse)
+#         r2 = r2_score(actuals_rescaled, predictions_rescaled)
+
+#         metrics = {
+#             'Mean Absolute Error (MAE)': mae,
+#             'Mean Squared Error (MSE)': mse,
+#             'Root Mean Squared Error (RMSE)': rmse,
+#             'R² Score': r2
+#         }
+
+#         print("Evaluation Metrics:")
+#         for metric, value in metrics.items():
+#             print(f"{metric}: {value}")
+#         return results_df
+#     except Exception as e:
+#         raise EnergyGenerationException(e, sys) from e  
