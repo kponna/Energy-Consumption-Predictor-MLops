@@ -75,7 +75,7 @@ class DataTransformation:
             save_numpy_array_data(self.data_transformation_config.transformed_y_train_file_path, y_train_scaled)
             save_numpy_array_data(self.data_transformation_config.transformed_y_test_file_path, y_test_scaled)
             save_numpy_array_data(self.data_transformation_config.transformed_y_val_file_path, y_val_scaled)
-
+            save_object("final_model/scaler.pkl",scaler) 
             logging.info("saved numpy arrays in the path.")
             data_transformation_artifact = DataTransformationArtifact( 
                 transformed_object_file_path=self.data_transformation_config.transformed_object_file_path,

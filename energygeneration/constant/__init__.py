@@ -58,7 +58,7 @@ DATA_TRANSFORMATION_DIR:str = "data_transformation"
 DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR:str = "transformed" 
 DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR:str = "transformed_object"
 PREPROCESSING_OBJECT_FILE_NAME:str ="scaler.pkl" 
-TIME_STEPS: int = 12
+TIME_STEPS: int = 6
 
 """
 Model Trainer related constant start with MODEL TRAINER VAR NAME

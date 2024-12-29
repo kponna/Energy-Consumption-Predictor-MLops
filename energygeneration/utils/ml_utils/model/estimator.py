@@ -1,7 +1,7 @@
 import sys 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout, InputLayer
-from tensorflow.keras.callbacks import ModelCheckpoint 
+from tensorflow.keras.callbacks import ModelCheckpoint , EarlyStopping
 from tensorflow.keras.losses import MeanSquaredError
 from tensorflow.keras.metrics import RootMeanSquaredError 
 from tensorflow.keras.regularizers import l2
@@ -54,6 +54,14 @@ class EnergyLstmModel:
             if self.model_checkpoint_path:
                 callbacks.append(ModelCheckpoint(self.model_checkpoint_path, save_best_only=True))
 
+            # Add EarlyStopping callback
+            early_stopping = EarlyStopping(
+                monitor='val_loss',  # Monitor validation loss
+                patience=10,         # Stop training after 10 epochs with no improvement
+                restore_best_weights=True  # Restore model weights from the best epoch
+            )
+            callbacks.append(early_stopping)
+            
             logging.info("Starting LSTM model training...")
             history = self.model.fit(
                 X_train,
