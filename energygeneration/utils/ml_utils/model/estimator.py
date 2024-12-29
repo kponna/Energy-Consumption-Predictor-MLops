@@ -4,25 +4,23 @@ from tensorflow.keras.layers import LSTM, Dense, Dropout, InputLayer
 from tensorflow.keras.callbacks import ModelCheckpoint , EarlyStopping
 from tensorflow.keras.losses import MeanSquaredError
 from tensorflow.keras.metrics import RootMeanSquaredError 
-from tensorflow.keras.regularizers import l2
 from tensorflow.keras.optimizers import Adam
 from energygeneration.exception_handling.exception import EnergyGenerationException
 from energygeneration.logging.logger import logging
+from energygeneration.constant import TIME_STEPS,LEARNING_RATE,EPOCHS
 
 class EnergyLstmModel:
-    def __init__(self, input_shape, learning_rate=0.0001, model_checkpoint_path=None):  
-        try:
-            self.input_shape = input_shape
-            self.learning_rate = learning_rate
+    def __init__(self, model_checkpoint_path=None):  
+        try:  
             self.model_checkpoint_path = model_checkpoint_path
             self.model = None
         except Exception as e:
             raise EnergyGenerationException(e, sys)
 
-    def build_model(self): 
+    def build_model(self):
         try:
             model = Sequential()
-            model.add(InputLayer((12, 11)))
+            model.add(InputLayer((TIME_STEPS, 11)))
             model.add(LSTM(64))
             model.add(Dense(128))
             model.add(Dense(64))
@@ -37,7 +35,7 @@ class EnergyLstmModel:
             model.summary()
             model.compile(
                 loss=MeanSquaredError(),
-                optimizer=Adam(learning_rate=self.learning_rate),
+                optimizer=Adam(learning_rate=LEARNING_RATE),
                 metrics=[RootMeanSquaredError()]
             )   
             self.model = model
@@ -45,7 +43,7 @@ class EnergyLstmModel:
         except Exception as e:
             raise EnergyGenerationException(e, sys)
 
-    def train_model(self, X_train, y_train, X_val, y_val, epochs=50): 
+    def train_model(self, X_train, y_train, X_val, y_val, epochs=EPOCHS): 
         try:
             if self.model is None:
                 raise ValueError("Model is not built. Call `build_model` before training.")
@@ -89,3 +87,5 @@ class EnergyLstmModel:
             return y_pred
         except Exception as e:
             raise EnergyGenerationException(e, sys) 
+
+

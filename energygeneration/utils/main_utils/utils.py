@@ -1,7 +1,7 @@
 import yaml
 from energygeneration.exception_handling.exception import EnergyGenerationException
 from energygeneration.logging.logger import logging
-from sklearn.metrics import mean_absolute_error,mean_squared_error,root_mean_squared_error,r2_score
+from energygeneration.constant import TIME_STEPS
 from datetime import timedelta 
 import os,sys
 import numpy as np
@@ -78,8 +78,7 @@ def load_object(file_path:str,)-> object:
 def add_cyclic_features(data: pd.DataFrame, schema_file: str) -> pd.DataFrame: 
     try:
         schema = read_yaml_file(schema_file)
-        df = data.copy()
-
+        df = data.copy() 
         # Load column names and constants from schema
         input_column = schema["cyclic_features"]["input_column"]
         timestamp_column = schema["cyclic_features"]["timestamp_column"]
@@ -131,29 +130,46 @@ def add_cyclic_features(data: pd.DataFrame, schema_file: str) -> pd.DataFrame:
         raise EnergyGenerationException(e, sys) from e
 
  
+# def df_to_X_y(df, time_steps=12):
+#     df_as_np = df.to_numpy()
+#     X = []
+#     y = []
+#     for i in range(len(df_as_np) - time_steps):
+#         # Select the window of rows as input
+#         row = df_as_np[i:i+time_steps]
+#         X.append(row)
+#         # Select the target (value column)
+#         label = df_as_np[i+time_steps][0] 
+#         y.append(label)
+#     # Convert to NumPy arrays
+#     X = np.array(X)
+#     y = np.array(y)
+    
+#     # Log shapes and first 5 samples
+#     logging.info(f"Shapes - X: {X.shape}, y: {y.shape}")
+#     logging.info("First 2 samples of X:")
+#     logging.info(X[:2])  # Print first 5 samples of X
+#     logging.info("\nFirst 2 samples of y:")
+#     logging.info(y[:2])  # Print first 5 samples of y
+#     return X,y
 def df_to_X_y(df, time_steps=12):
     df_as_np = df.to_numpy()
     X = []
     y = []
     for i in range(len(df_as_np) - time_steps):
-        # Select the window of rows as input
-        row = df_as_np[i:i+time_steps]
+        # Exclude the first column (value) for X
+        row = df_as_np[i:i+time_steps, 1:]  
         X.append(row)
-        # Select the target (value column)
-        label = df_as_np[i+time_steps][0] 
+        # Use the target (value column) for y
+        label = df_as_np[i+time_steps][0]
         y.append(label)
     # Convert to NumPy arrays
     X = np.array(X)
     y = np.array(y)
-    
-    # Log shapes and first 5 samples
     logging.info(f"Shapes - X: {X.shape}, y: {y.shape}")
-    logging.info("First 2 samples of X:")
-    logging.info(X[:2])  # Print first 5 samples of X
-    logging.info("\nFirst 2 samples of y:")
-    logging.info(y[:2])  # Print first 5 samples of y
-    return X,y
-  
+    return X, y
+
+
 def scale_and_save_target(scaler, target_df, scaler_file_path): 
     try:
         logging.info("Entered the scale_and_save_target method of utils.")
@@ -170,33 +186,33 @@ def scale_and_save_target(scaler, target_df, scaler_file_path):
         return scaled_target
     except Exception as e:
         raise EnergyGenerationException(e, sys) from e
-
-# def evaluate_model(model, X_test, y_test, scaler,file_path): 
+    
+# def prepare_batch_input(df, time_steps=TIME_STEPS):
 #     try:
-#         predictions = model.predict(X_test).flatten()
-#         predictions_rescaled = scaler.inverse_transform(predictions.reshape(-1, 1)).flatten()
-#         actuals_rescaled = scaler.inverse_transform(y_test.reshape(-1, 1)).flatten()
-
-#         results_df = pd.DataFrame({
-#             'Predictions': predictions_rescaled,
-#             'Actuals': actuals_rescaled
-#         })
-
-#         mae = mean_absolute_error(actuals_rescaled, predictions_rescaled)
-#         mse = mean_squared_error(actuals_rescaled, predictions_rescaled)
-#         rmse = np.sqrt(mse)
-#         r2 = r2_score(actuals_rescaled, predictions_rescaled)
-
-#         metrics = {
-#             'Mean Absolute Error (MAE)': mae,
-#             'Mean Squared Error (MSE)': mse,
-#             'Root Mean Squared Error (RMSE)': rmse,
-#             'R² Score': r2
-#         }
-
-#         print("Evaluation Metrics:")
-#         for metric, value in metrics.items():
-#             print(f"{metric}: {value}")
-#         return results_df
+#         df_as_np = df.to_numpy()
+#         X = []
+#         for i in range(len(df_as_np) - time_steps + 1):
+#             # Select the window of rows as input
+#             row = df_as_np[i:i+time_steps]
+#             X.append(row) 
+#         X = np.array(X)
+#         return X
 #     except Exception as e:
-#         raise EnergyGenerationException(e, sys) from e  
+#         raise EnergyGenerationException(e, sys) from e
+
+def prepare_batch_input(df, time_steps=6):
+    try:
+        df_as_np = df.to_numpy()
+        # Add a dummy column of zeros to match the trained input shape
+        dummy_column = np.zeros((df_as_np.shape[0], 1))
+        df_as_np = np.hstack((dummy_column, df_as_np))
+        
+        X = []
+        for i in range(len(df_as_np) - time_steps + 1):
+            # Use all 11 columns (10 original + 1 dummy)
+            row = df_as_np[i:i+time_steps]
+            X.append(row)
+        X = np.array(X)
+        return X
+    except Exception as e:
+        raise EnergyGenerationException(e, sys) from e

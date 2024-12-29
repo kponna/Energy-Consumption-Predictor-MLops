@@ -1,6 +1,6 @@
 import os
 import sys 
-from energygeneration.constant import TIME_STEPS
+from energygeneration.constant import EPOCHS
 from energygeneration.exception_handling.exception import EnergyGenerationException
 from energygeneration.logging.logger import logging 
 from energygeneration.entity.artifact_entity import ModelTrainerArtifact,DataTransformationArtifact
@@ -20,9 +20,8 @@ class ModelTrainer:
             self.model_trainer_config = model_trainer_config
             self.data_transformation_artifact = data_transformation_artifact
         except Exception as e:
-            raise EnergyGenerationException(e, sys) 
-
-
+            raise EnergyGenerationException(e, sys)  
+        
     def track_mlflow(self, best_model, train_metrics, val_metrics, test_metrics, X_train_sample, scaler):
         with mlflow.start_run(run_name="Model_Training_And_Evaluation"):
             # Log train metrics
@@ -45,9 +44,9 @@ class ModelTrainer:
 
             # Log the trained model
             input_example = X_train_sample[:1]
-            signature = infer_signature(input_example, best_model.predict(input_example))
-            # mlflow.tensorflow.log_model(best_model, "Trained_LSTM_Model", input_example=input_example, signature=signature)
+            signature = infer_signature(input_example, best_model.predict(input_example)) 
             mlflow.tensorflow.log_model(best_model.model, "Trained_LSTM_Model", input_example=input_example, signature=signature)
+
     def initiate_model_trainer(self) -> ModelTrainerArtifact:
         try:
             logging.info("Loading transformed data...")
@@ -65,11 +64,10 @@ class ModelTrainer:
             logging.info("Building the LSTM model...") 
             # Ensure you have the scaler loaded from your transformation step
             scaler = load_object(self.data_transformation_artifact.transformed_object_file_path) 
-            Energy_Model = EnergyLstmModel(input_shape=(TIME_STEPS,11),
-                    model_checkpoint_path=self.model_trainer_config.trained_model_file_path)
+            Energy_Model = EnergyLstmModel(model_checkpoint_path=self.model_trainer_config.trained_model_file_path)
             Energy_Model.build_model() 
             logging.info("Starting model training...")
-            Energy_Model.train_model(X_train, y_train, X_val, y_val, epochs=50) 
+            Energy_Model.train_model(X_train, y_train, X_val, y_val, epochs=EPOCHS) 
             model_dir_path = os.path.dirname(self.model_trainer_config.trained_model_file_path)
             os.makedirs(model_dir_path,exist_ok=True) 
             save_object(self.model_trainer_config.trained_model_file_path, obj=Energy_Model)
@@ -118,9 +116,7 @@ class ModelTrainer:
                 X_train_sample=X_train,
                 scaler=scaler,
             ) 
-
-            # Launch the MLflow UI
-            # subprocess.run(["mlflow", "ui"])
+ 
             save_object("final_model/model.keras",Energy_Model) 
 
             # print(mlflow ui)
@@ -129,8 +125,7 @@ class ModelTrainer:
                 train_metric_artifact=regression_train_metric,
                 test_metric_artifact=regression_test_metric,
                 val_metric_artifact=regression_val_metric
-            ) 
-            logging.info(f"Model Trainer artifact: {model_trainer_artifact}")
+            )  
             return model_trainer_artifact
         except Exception as e:
             raise EnergyGenerationException(e, sys)
