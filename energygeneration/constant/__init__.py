@@ -21,9 +21,9 @@ TRAIN_TARGET_FILE_NAME:str = "y_train.np"
 TEST_TARGET_FILE_NAME:str = "y_test.np"
 VAL_TARGET_FILE_NAME:str = "y_val.np"
  
-MODEL_FILE_NAME = "model.keras"
-SAVED_MODEL_DIR = os.path.join("saved_models")
 
+SAVED_MODEL_DIR = os.path.join("saved_models")
+MODEL_FILE_NAME = "model.keras"
 SCHEMA_FILE_PATH = os.path.join("data_schema", "schema.yaml")
 # SCHEMA_DROP_COLS = ["respondent-name", "type-name"] 
 

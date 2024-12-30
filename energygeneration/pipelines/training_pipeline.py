@@ -23,7 +23,7 @@ from energygeneration.source.data_ingestion import DataIngestion
 from energygeneration.source.data_validation import DataValidation
 from energygeneration.source.data_transformation import DataTransformation
 from energygeneration.source.model_trainer import ModelTrainer
-from energygeneration.constant import TRAINING_BUCKET_NAME
+from energygeneration.constant import TRAINING_BUCKET_NAME,SAVED_MODEL_DIR
 
 from energygeneration.cloud.s3_syncer import S3Sync
 
@@ -74,6 +74,7 @@ class TrainingPipeline:
             return model_trainer_artifact
         except Exception as e:
             raise EnergyGenerationException(e,sys)
+        
     ## local artifact is pushed to s3 bucket
     def sync_artifact_dir_to_s3(self):
         try:
@@ -86,7 +87,7 @@ class TrainingPipeline:
     def sync_save_model_dir_to_s3(self):
         try:
             aws_bucket_url= f"s3://{TRAINING_BUCKET_NAME}/final_model/{self.training_pipeline_config.timestamp}"
-            self.s3_sync.sync_folder_to_s3(folder=self.training_pipeline_config.artifact_dir,aws_bucket_url=aws_bucket_url)
+            self.s3_sync.sync_folder_to_s3(folder=self.training_pipeline_config.model_dir,aws_bucket_url=aws_bucket_url)
         except Exception as e:
             raise EnergyGenerationException(e,sys)
         
