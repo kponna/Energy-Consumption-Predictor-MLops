@@ -68,3 +68,5 @@ EPOCHS:int = 50
 MODEL_TRAINER_DIR_NAME: str = "model_trainer"
 MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
 MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl" 
+
+TRAINING_BUCKET_NAME:str = "energygeneration"
