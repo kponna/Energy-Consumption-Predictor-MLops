@@ -151,24 +151,7 @@ def df_to_X_y(df, time_steps=12):
     logging.info(X[:2])  # Print first 5 samples of X
     logging.info("\nFirst 2 samples of y:")
     logging.info(y[:2])  # Print first 5 samples of y
-    return X,y
-# def df_to_X_y(df, time_steps=12):
-#     df_as_np = df.to_numpy()
-#     X = []
-#     y = []
-#     for i in range(len(df_as_np) - time_steps):
-#         # Exclude the first column (value) for X
-#         row = df_as_np[i:i+time_steps, 1:]  
-#         X.append(row)
-#         # Use the target (value column) for y
-#         label = df_as_np[i+time_steps][0]
-#         y.append(label)
-#     # Convert to NumPy arrays
-#     X = np.array(X)
-#     y = np.array(y)
-#     logging.info(f"Shapes - X: {X.shape}, y: {y.shape}")
-#     return X, y
-
+    return X,y 
 
 def scale_and_save_target(scaler, target_df, scaler_file_path): 
     try:
@@ -186,20 +169,7 @@ def scale_and_save_target(scaler, target_df, scaler_file_path):
         return scaled_target
     except Exception as e:
         raise EnergyGenerationException(e, sys) from e
-    
-# def prepare_batch_input(df, time_steps=TIME_STEPS):
-#     try:
-#         df_as_np = df.to_numpy()
-#         X = []
-#         for i in range(len(df_as_np) - time_steps + 1):
-#             # Select the window of rows as input
-#             row = df_as_np[i:i+time_steps]
-#             X.append(row) 
-#         X = np.array(X)
-#         return X
-#     except Exception as e:
-#         raise EnergyGenerationException(e, sys) from e
-
+     
 def prepare_batch_input(df, time_steps=6):
     try:
         df_as_np = df.to_numpy()
