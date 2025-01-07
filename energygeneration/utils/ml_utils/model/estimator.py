@@ -1,16 +1,27 @@
-import sys 
+import sys
+import numpy as np
+from energygeneration.logging.logger import logging
+from energygeneration.exception_handling.exception import EnergyGenerationException
+from energygeneration.constant import TIME_STEPS,LEARNING_RATE,EPOCHS,PATIENCE
+
+from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Dropout, InputLayer
-from tensorflow.keras.callbacks import ModelCheckpoint , EarlyStopping
 from tensorflow.keras.losses import MeanSquaredError
 from tensorflow.keras.metrics import RootMeanSquaredError 
-from tensorflow.keras.optimizers import Adam
-from energygeneration.exception_handling.exception import EnergyGenerationException
-from energygeneration.logging.logger import logging
-from energygeneration.constant import TIME_STEPS,LEARNING_RATE,EPOCHS
+from tensorflow.keras.layers import LSTM, Dense, Dropout, InputLayer
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping
+
 
 class EnergyLstmModel:
-    def __init__(self, model_checkpoint_path=None):  
+    """
+    A class to build, train, and use an LSTM-based energy prediction model. 
+    """
+    def __init__(self, model_checkpoint_path=None):
+        """
+        Initialize the EnergyLstmModel. 
+        Args:
+            model_checkpoint_path (str, optional): Path to save the best model. Defaults to None. 
+        """
         try:  
             self.model_checkpoint_path = model_checkpoint_path
             self.model = None
@@ -18,6 +29,9 @@ class EnergyLstmModel:
             raise EnergyGenerationException(e, sys)
 
     def build_model(self):
+        """
+        Build the LSTM model with a specified architecture.
+        """
         try:
             model = Sequential()
             model.add(InputLayer((TIME_STEPS, 11)))
@@ -43,7 +57,18 @@ class EnergyLstmModel:
         except Exception as e:
             raise EnergyGenerationException(e, sys)
 
-    def train_model(self, X_train, y_train, X_val, y_val, epochs=EPOCHS): 
+    def train_model(self, X_train, y_train, X_val, y_val, epochs=EPOCHS):
+        """
+        Train the LSTM model. 
+        Args:
+            X_train (np.array): Training features.
+            y_train (np.array): Training labels.
+            X_val (np.array): Validation features.
+            y_val (np.array): Validation labels.
+            epochs (int): Number of training epochs. 
+        Returns:
+            History: Training history object. 
+        """
         try:
             if self.model is None:
                 raise ValueError("Model is not built. Call `build_model` before training.")
@@ -54,9 +79,9 @@ class EnergyLstmModel:
 
             # Add EarlyStopping callback
             early_stopping = EarlyStopping(
-                monitor='val_loss',  # Monitor validation loss
-                patience=10,         # Stop training after 10 epochs with no improvement
-                restore_best_weights=True  # Restore model weights from the best epoch
+                monitor='val_loss',  
+                patience=PATIENCE, 
+                restore_best_weights=True 
             )
             callbacks.append(early_stopping)
             
@@ -74,7 +99,14 @@ class EnergyLstmModel:
         except Exception as e:
             raise EnergyGenerationException(e, sys)
 
-    def predict(self, X): 
+    def predict(self, X)-> np.array:
+        """
+        Generate predictions using the trained LSTM model. 
+        Args:
+            X (np.array): Input data for prediction. 
+        Returns:
+            np.array: Predicted values as a flattened array. 
+        """
         try:
             if self.model is None:
                 raise ValueError("Model is not built. Call `build_model` and train before prediction.")
@@ -86,6 +118,4 @@ class EnergyLstmModel:
             logging.info("Predictions generated and rescaled successfully.")
             return y_pred
         except Exception as e:
-            raise EnergyGenerationException(e, sys) 
-
-
+            raise EnergyGenerationException(e, sys)

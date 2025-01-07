@@ -38,7 +38,7 @@ class EnergyGenerationException(Exception):
     
 if __name__=="__main__":
     try: 
-        a = 1/0  # This will raise a ZeroDivisionError
+        a = 1/0  # This example will raise a ZeroDivisionError
         print("This will not be printed",a)
     except Exception as e:
         raise EnergyGenerationException(e,sys) 

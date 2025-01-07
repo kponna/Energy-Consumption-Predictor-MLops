@@ -1,25 +1,30 @@
-import os
-import json
+import os 
 import sys
+import json
+import certifi
 sys.path.append('/home/karthikponna/kittu/Energy generation prediction project/Energy-Generation-Predictor-MLops')
 import requests
 import pandas as pd
-from pymongo import MongoClient
 from dotenv import load_dotenv
-import certifi
-
+from pymongo import MongoClient
 from energygeneration.logging.logger import logging
 from energygeneration.exception_handling.exception import EnergyGenerationException
  
 class EnergyDataExtract():
+    """
+    A class to handle the extraction of energy data from the EIA API and 
+    storing it in a MongoDB collection.
+    """
     def __init__(self):
-        try:
-            # Load environment variables
+        """
+        Initializes the EnergyDataExtract class by setting up MongoDB 
+        and loading required environment variables.
+        """
+        try: 
             load_dotenv()
             self.MONGO_URI = os.getenv("PYMONGO_URI")
             self.API_KEY = os.getenv("API_KEY")
-            
-            # Check for missing environment variables
+             
             if not self.MONGO_URI or not self.API_KEY:
                 logging.error("Missing MongoDB URI or API Key in environment variables.")
                 raise EnergyGenerationException("Environment variables for MONGO_URI or API_KEY not found.", sys)
@@ -36,8 +41,7 @@ class EnergyDataExtract():
         """
         Fetches hourly energy generation data from the EIA API and stores it in MongoDB.
         """
-        try:
-            # API URL
+        try: 
             API_URL = f"https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?api_key={self.API_KEY}"
 
             # Find the latest entry in MongoDB
@@ -70,9 +74,7 @@ class EnergyDataExtract():
                         "offset": offset,
                         "length": length
                     })
-                }
-
-                # Make the GET request
+                } 
                 response = requests.get(API_URL, headers=headers)
 
                 if response.status_code == 200:
@@ -132,7 +134,10 @@ class EnergyDataExtract():
             raise EnergyGenerationException(e, sys)
 
 if __name__ == "__main__":
-
+    """
+    Entry point for the script. Initializes the EnergyDataExtract object and 
+    performs data fetching and storage operations.
+    """
     energy_data_obj = EnergyDataExtract()
     energy_data_obj.fetch_and_store_in_mongodb() 
     

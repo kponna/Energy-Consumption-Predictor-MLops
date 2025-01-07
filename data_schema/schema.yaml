@@ -2,7 +2,6 @@ columns:
   - period: datetime64[ns]
   - value: int64
 
-
 numerical_columns:
   - value
 
@@ -10,6 +9,7 @@ datetime_columns:
   - period
 
 cyclic_features:
+
   timestamp_column: "Seconds"
   datetime_column: "Datetime"
   input_column: "period"
@@ -28,6 +28,7 @@ cyclic_features:
   month_features:
     - "Month sin"
     - "Month cos"
+
 drop_columns:
   - "Seconds"
   - "Hour"

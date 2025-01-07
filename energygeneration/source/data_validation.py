@@ -3,31 +3,62 @@ import sys
 import pandas as pd  
 from scipy.stats import ks_2samp
 
-from energygeneration.exception_handling.exception import EnergyGenerationException
 from energygeneration.logging.logger import logging
-from energygeneration.entity.config_entity import DataValidationConfig
-from energygeneration.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
+from energygeneration.exception_handling.exception import EnergyGenerationException
+
 from energygeneration.constant import SCHEMA_FILE_PATH
 from energygeneration.utils.main_utils.utils import read_yaml_file,write_yaml_file
+
+from energygeneration.entity.config_entity import DataValidationConfig
+from energygeneration.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact
+ 
 class DataValidation:
-    def __init__(self,data_ingestion_artifact: DataIngestionArtifact,
-                 data_validation_config: DataValidationConfig):
+    """
+    Class for handling data validation and data drift.
+    """
+    def __init__(self,data_ingestion_artifact: DataIngestionArtifact, data_validation_config: DataValidationConfig):
+        """
+        Initializes the DataValidation class.
+
+        Args:
+            data_ingestion_artifact (DataIngestionArtifact): The artifact containing paths to the ingested data.
+            data_validation_config (DataValidationConfig): Configuration object for data validation. 
+        """
         try:
             self.data_ingestion_artifact = data_ingestion_artifact
             self.data_validation_config = data_validation_config
             self._schema_config = read_yaml_file(SCHEMA_FILE_PATH) 
         except Exception as e:
             raise EnergyGenerationException(e,sys)
+        
     @staticmethod
     def read_data(file_path)->pd.DataFrame:
+        """
+        Reads data from a CSV file.
+
+        Args:
+            file_path (str): Path to the CSV file.
+
+        Returns:
+            pd.DataFrame: The DataFrame containing the data from the CSV file. 
+        """
         try:
             return pd.read_csv(file_path)
         except Exception as e:
             raise EnergyGenerationException(e,sys)
         
     def validate_no_of_cols(self,dataframe:pd.DataFrame):
+        """
+        Validates if the DataFrame contains the required number of columns.
+
+        Args:
+            dataframe (pd.DataFrame): The DataFrame to validate.
+
+        Returns:
+            bool: True if the number of columns matches the expected count, False otherwise. 
+        """
         try:
-            no_of_cols = len(self._schema_config["columns"])# len(self._schema_config)
+            no_of_cols = len(self._schema_config["columns"]) 
             logging.info(f"Required no. of columns:{no_of_cols}")
             logging.info(f"Dataframe  has columns: {len(dataframe.columns)}")
             if len(dataframe.columns) == no_of_cols:
@@ -37,7 +68,13 @@ class DataValidation:
     
     def is_column_exist(self, dataframe: pd.DataFrame) -> bool:
         """
-        Validates the existence of numerical and datetime columns.
+        Validates the existence of required numerical and datetime columns.
+
+        Args:
+            dataframe (pd.DataFrame): The DataFrame to validate.
+
+        Returns:
+            bool: True if all required numerical and datetime columns exist, False otherwise. 
         """
         try:
             dataframe_columns = dataframe.columns
@@ -66,9 +103,19 @@ class DataValidation:
         except Exception as e:
             raise EnergyGenerationException(e, sys) 
 
-    def detect_data_drift(self, base_df, current_df, threshold= 0.05)->bool:
-        try:
-            # status = True
+    def detect_data_drift(self, base_df, current_df, threshold= 0.05) ->bool:
+        """
+        Detects data drift between the base and current DataFrames.
+
+        Args:
+            base_df (pd.DataFrame): The base DataFrame to compare against.
+            current_df (pd.DataFrame): The current DataFrame to check for drift.
+            threshold (float): The p-value threshold to consider drift. Default is 0.05.
+
+        Returns:
+            bool: True if no drift is detected (i.e., p-value > threshold), False otherwise. 
+        """
+        try: 
             drift_report = {}
             for col in base_df.columns:
                 d1 = base_df[col]
@@ -77,8 +124,7 @@ class DataValidation:
                 if threshold<= is_same_distance.pvalue:
                     is_found = False
                 else:
-                    is_found = True
-                    # status = False
+                    is_found = True 
                 drift_report.update({col:{
                     "p_value":float(is_same_distance.pvalue),
                     "drift_status":is_found
@@ -91,6 +137,12 @@ class DataValidation:
             raise EnergyGenerationException(e,sys)
         
     def initiate_data_validation(self)-> DataValidationArtifact:
+        """
+        Initiates the data validation process by reading, validating, and saving data.
+
+        Returns:
+            DataValidationArtifact: The artifact containing paths to the validated data. 
+        """
         try:
             train_file_path = self.data_ingestion_artifact.train_file_path
             test_file_path = self.data_ingestion_artifact.test_file_path

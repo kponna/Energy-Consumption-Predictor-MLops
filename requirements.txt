@@ -8,9 +8,7 @@ python-dotenv
 pymongo[srv]==3.6 
 scikit-learn
 matplotlib
-statsmodels
-# plotly
-# nbformat
+statsmodels 
 tensorflow 
 pyaml
 mlflow

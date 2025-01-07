@@ -1,6 +1,5 @@
 energy
 .env
 __pycache__
-logs
-Artifacts
-notes.py
+# logs
+# Artifacts

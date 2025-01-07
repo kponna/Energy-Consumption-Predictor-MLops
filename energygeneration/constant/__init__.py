@@ -1,10 +1,8 @@
-import sys
-import os 
-
+import os
+  
 """
 Defining common constant variables for training pipeline
 """
-
 TARGET_COLUMN = "value"
 PIPELINE_NAME: str = "EnergyGeneration"
 ARTIFACT_DIR: str = "Artifacts"
@@ -21,11 +19,9 @@ TRAIN_TARGET_FILE_NAME:str = "y_train.np"
 TEST_TARGET_FILE_NAME:str = "y_test.np"
 VAL_TARGET_FILE_NAME:str = "y_val.np"
  
-
-SAVED_MODEL_DIR = os.path.join("saved_models")
 MODEL_FILE_NAME = "model.keras"
+SAVED_MODEL_DIR = os.path.join("saved_models") 
 SCHEMA_FILE_PATH = os.path.join("data_schema", "schema.yaml")
-# SCHEMA_DROP_COLS = ["respondent-name", "type-name"] 
 
 """
 Data Ingestion related constant start with DATA_INGESTION VAR NAME
@@ -34,11 +30,7 @@ DATA_INGESTION_COLLECTION_NAME: str = "energy_generation"
 DATA_INGESTION_DATABASE_NAME: str = "eia_data"
 DATA_INGESTION_DIR_NAME: str = "data_ingestion"
 DATA_INGESTION_FEATURE_STORE_DIR: str = "feature_store"
-DATA_INGESTION_INGESTED_DIR: str = "ingested"
-##### DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO: float = 0.2
-
-# Constants for time series modeling
-
+DATA_INGESTION_INGESTED_DIR: str = "ingested" 
 TRAIN_VAL_TEST_SPLIT_RATIO: float = 0.7  # 70% of data for training
 VALIDATION_SPLIT_RATIO: float = 0.4  # 40% of the remaining data for validation
 
@@ -58,7 +50,8 @@ DATA_TRANSFORMATION_DIR:str = "data_transformation"
 DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR:str = "transformed" 
 DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR:str = "transformed_object"
 PREPROCESSING_OBJECT_FILE_NAME:str ="scaler.pkl" 
-TIME_STEPS: int = 6
+TIME_STEPS: int = 3
+PATIENCE:int = 10
 
 """
 Model Trainer related constant start with MODEL TRAINER VAR NAME
@@ -67,6 +60,6 @@ LEARNING_RATE:float = 0.0001
 EPOCHS:int = 50
 MODEL_TRAINER_DIR_NAME: str = "model_trainer"
 MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"
-MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl" 
+MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl"
 
 TRAINING_BUCKET_NAME:str = "energygeneration"

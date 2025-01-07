@@ -3,10 +3,8 @@ import json
 import csv
 import os
 from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
-
+ 
+load_dotenv() 
 # Get API key and MongoDB connection string from .env file
 api_key = os.getenv("API_KEY") 
 
@@ -15,14 +13,17 @@ url = f"https://api.eia.gov/v2/electricity/rto/fuel-type-data/data/?api_key={api
 
 # Define the CSV file path
 output_dir = "data/dataset"
-os.makedirs(output_dir, exist_ok=True)  # Create the directory if it doesn't exist
+os.makedirs(output_dir, exist_ok=True) 
 csv_file_name = os.path.join(output_dir,"energy_generated.csv")
 
 # Initialize list to store all records
 all_records = []
-
-# Function to fetch data in paginated requests
+ 
 def fetch_data():
+    """
+    Fetches hourly energy generation data from the EIA API in paginated requests
+    and stores it in the `all_records` list.
+    """
     offset = 0
     length = 5000
     while True:

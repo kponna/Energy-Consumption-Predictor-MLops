@@ -1,0 +1,232 @@
+[ 2025-01-07 08:20:08,025 ] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[ 2025-01-07 08:20:08,030 ] 107 dagshub - INFO - Accessing as kponna
+[ 2025-01-07 08:20:09,367 ] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/repos/kponna/Energy-Generation-Predictor-MLops "HTTP/1.1 200 OK"
+[ 2025-01-07 08:20:10,534 ] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[ 2025-01-07 08:20:10,537 ] 107 dagshub - INFO - Initialized MLflow to track repo "kponna/Energy-Generation-Predictor-MLops"
+[ 2025-01-07 08:20:10,539 ] 107 dagshub - INFO - Repository kponna/Energy-Generation-Predictor-MLops initialized!
+[ 2025-01-07 08:20:10,720 ] 28 dotenv.main - WARNING - Python-dotenv could not parse statement starting at line 14
+[ 2025-01-07 08:20:10,721 ] 28 dotenv.main - WARNING - Python-dotenv could not parse statement starting at line 18
+[ 2025-01-07 08:20:10,721 ] 28 dotenv.main - WARNING - Python-dotenv could not parse statement starting at line 20
+[ 2025-01-07 08:20:10,721 ] 28 dotenv.main - WARNING - Python-dotenv could not parse statement starting at line 24
+[ 2025-01-07 08:20:10,721 ] 28 dotenv.main - WARNING - Python-dotenv could not parse statement starting at line 26
+[ 2025-01-07 08:20:10,722 ] 28 dotenv.main - WARNING - Python-dotenv could not parse statement starting at line 28
+[ 2025-01-07 08:20:10,722 ] 28 dotenv.main - WARNING - Python-dotenv could not parse statement starting at line 30
+[ 2025-01-07 08:20:10,723 ] 21 root - INFO - Initiating Data Ingestion.
+[ 2025-01-07 08:20:10,723 ] 44 root - INFO - Fetching the data from Mongodb.
+[ 2025-01-07 08:20:12,967 ] 61 root - INFO - Completed fetching the data from mongodb.
+[ 2025-01-07 08:20:12,967 ] 78 root - INFO - Converting the fetched data into a dataframe.
+[ 2025-01-07 08:20:13,098 ] 83 root - INFO - The Energy data has been saved in feature store file path.
+[ 2025-01-07 08:20:13,098 ] 99 root - INFO - Starting data split into train, validation, and test sets.
+[ 2025-01-07 08:20:13,100 ] 116 root - INFO - Completed splitting the data into train, validation, and test sets.
+[ 2025-01-07 08:20:13,222 ] 126 root - INFO - Train, validation, and test datasets saved as CSV files.
+[ 2025-01-07 08:20:13,222 ] 128 root - INFO - Data split sizes:
+[ 2025-01-07 08:20:13,222 ] 129 root - INFO - Train set: 17892, Validation set: 3067, Test set: 4602
+[ 2025-01-07 08:20:13,229 ] 23 root - INFO - Data ingestion completed.
+[ 2025-01-07 08:20:13,235 ] 29 root - INFO - Initiating Data Validation.
+[ 2025-01-07 08:20:13,261 ] 62 root - INFO - Required no. of columns:2
+[ 2025-01-07 08:20:13,261 ] 63 root - INFO - Dataframe  has columns: 2
+[ 2025-01-07 08:20:13,261 ] 62 root - INFO - Required no. of columns:2
+[ 2025-01-07 08:20:13,261 ] 63 root - INFO - Dataframe  has columns: 2
+[ 2025-01-07 08:20:13,261 ] 62 root - INFO - Required no. of columns:2
+[ 2025-01-07 08:20:13,261 ] 63 root - INFO - Dataframe  has columns: 2
+[ 2025-01-07 08:20:13,468 ] 31 root - INFO - Data Validation completed.
+[ 2025-01-07 08:20:13,469 ] 37 root - INFO - Initiating Data Transformation.
+[ 2025-01-07 08:20:13,469 ] 53 root - INFO - Entering initiate_data_transformation method of DataTransformation class.
+[ 2025-01-07 08:20:13,503 ] 58 root - INFO - Train df :                period  value
+0  2022-01-01 00:00:00   3962
+1  2022-01-01 01:00:00   3970
+2  2022-01-01 02:00:00   3963
+3  2022-01-01 03:00:00   3750
+4  2022-01-01 04:00:00   3513
+[ 2025-01-07 08:20:13,509 ] 59 root - INFO - Test df:                 period  value
+0  2024-05-23 07:00:00   2290
+1  2024-05-23 08:00:00   2253
+2  2024-05-23 09:00:00   2258
+3  2024-05-23 10:00:00   2430
+4  2024-05-23 11:00:00   2465
+[ 2025-01-07 08:20:13,513 ] 60 root - INFO - Val df:                 period  value
+0  2024-01-16 12:00:00   3030
+1  2024-01-16 13:00:00   3718
+2  2024-01-16 14:00:00   3770
+3  2024-01-16 15:00:00   3785
+4  2024-01-16 16:00:00   3917
+[ 2025-01-07 08:20:13,514 ] 61 root - INFO - train_df.shape:(17892, 2), test_df.shape: (4602, 2),val_df.shape: (3067, 2)
+[ 2025-01-07 08:20:13,514 ] 62 root - INFO - train cols:Index(['period', 'value'], dtype='object'),test cols: Index(['period', 'value'], dtype='object'),val cols: Index(['period', 'value'], dtype='object')
+[ 2025-01-07 08:20:13,514 ] 65 root - INFO - Applying cyclic feature transformation on datasets.
+[ 2025-01-07 08:20:13,641 ] 165 root - INFO - printing df after adding cyclic features:    value       Day sin   Day cos  Year sin  Year cos  Hour sin  Hour cos  Minute sin  Minute cos  Month sin  Month cos
+0   3962 -8.652299e-12  1.000000  0.006709  0.999977  0.000000  1.000000         0.0         1.0        0.5   0.866025
+1   3970  2.588190e-01  0.965926  0.007426  0.999972  0.258819  0.965926         0.0         1.0        0.5   0.866025
+2   3963  5.000000e-01  0.866025  0.008143  0.999967  0.500000  0.866025         0.0         1.0        0.5   0.866025
+3   3750  7.071068e-01  0.707107  0.008859  0.999961  0.707107  0.707107         0.0         1.0        0.5   0.866025
+4   3513  8.660254e-01  0.500000  0.009576  0.999954  0.866025  0.500000         0.0         1.0        0.5   0.866025
+[ 2025-01-07 08:20:13,711 ] 165 root - INFO - printing df after adding cyclic features:    value   Day sin   Day cos  Year sin  Year cos  Hour sin  Hour cos  Minute sin  Minute cos  Month sin  Month cos
+0   2290  0.965926 -0.258819  0.627402 -0.778696  0.965926 -0.258819         0.0         1.0        0.5  -0.866025
+1   2253  0.866025 -0.500000  0.626844 -0.779145  0.866025 -0.500000         0.0         1.0        0.5  -0.866025
+2   2258  0.707107 -0.707107  0.626285 -0.779594  0.707107 -0.707107         0.0         1.0        0.5  -0.866025
+3   2430  0.500000 -0.866025  0.625726 -0.780043  0.500000 -0.866025         0.0         1.0        0.5  -0.866025
+4   2465  0.258819 -0.965926  0.625167 -0.780491  0.258819 -0.965926         0.0         1.0        0.5  -0.866025
+[ 2025-01-07 08:20:13,773 ] 165 root - INFO - printing df after adding cyclic features:    value       Day sin   Day cos  Year sin  Year cos      Hour sin  Hour cos  Minute sin  Minute cos  Month sin  Month cos
+0   3030 -1.762851e-12 -1.000000  0.261918  0.965090  1.224647e-16 -1.000000         0.0         1.0        0.5   0.866025
+1   3718 -2.588190e-01 -0.965926  0.262609  0.964902 -2.588190e-01 -0.965926         0.0         1.0        0.5   0.866025
+2   3770 -5.000000e-01 -0.866025  0.263301  0.964714 -5.000000e-01 -0.866025         0.0         1.0        0.5   0.866025
+3   3785 -7.071068e-01 -0.707107  0.263992  0.964525 -7.071068e-01 -0.707107         0.0         1.0        0.5   0.866025
+4   3917 -8.660254e-01 -0.500000  0.264684  0.964335 -8.660254e-01 -0.500000         0.0         1.0        0.5   0.866025
+[ 2025-01-07 08:20:13,826 ] 69 root - INFO - Train df :   value       Day sin   Day cos  Year sin  Year cos  Hour sin  Hour cos  Minute sin  Minute cos  Month sin  Month cos
+0   3962 -8.652299e-12  1.000000  0.006709  0.999977  0.000000  1.000000         0.0         1.0        0.5   0.866025
+1   3970  2.588190e-01  0.965926  0.007426  0.999972  0.258819  0.965926         0.0         1.0        0.5   0.866025
+2   3963  5.000000e-01  0.866025  0.008143  0.999967  0.500000  0.866025         0.0         1.0        0.5   0.866025
+3   3750  7.071068e-01  0.707107  0.008859  0.999961  0.707107  0.707107         0.0         1.0        0.5   0.866025
+4   3513  8.660254e-01  0.500000  0.009576  0.999954  0.866025  0.500000         0.0         1.0        0.5   0.866025
+[ 2025-01-07 08:20:13,881 ] 70 root - INFO - Test df:    value   Day sin   Day cos  Year sin  Year cos  Hour sin  Hour cos  Minute sin  Minute cos  Month sin  Month cos
+0   2290  0.965926 -0.258819  0.627402 -0.778696  0.965926 -0.258819         0.0         1.0        0.5  -0.866025
+1   2253  0.866025 -0.500000  0.626844 -0.779145  0.866025 -0.500000         0.0         1.0        0.5  -0.866025
+2   2258  0.707107 -0.707107  0.626285 -0.779594  0.707107 -0.707107         0.0         1.0        0.5  -0.866025
+3   2430  0.500000 -0.866025  0.625726 -0.780043  0.500000 -0.866025         0.0         1.0        0.5  -0.866025
+4   2465  0.258819 -0.965926  0.625167 -0.780491  0.258819 -0.965926         0.0         1.0        0.5  -0.866025
+[ 2025-01-07 08:20:13,911 ] 71 root - INFO - Val df:    value       Day sin   Day cos  Year sin  Year cos      Hour sin  Hour cos  Minute sin  Minute cos  Month sin  Month cos
+0   3030 -1.762851e-12 -1.000000  0.261918  0.965090  1.224647e-16 -1.000000         0.0         1.0        0.5   0.866025
+1   3718 -2.588190e-01 -0.965926  0.262609  0.964902 -2.588190e-01 -0.965926         0.0         1.0        0.5   0.866025
+2   3770 -5.000000e-01 -0.866025  0.263301  0.964714 -5.000000e-01 -0.866025         0.0         1.0        0.5   0.866025
+3   3785 -7.071068e-01 -0.707107  0.263992  0.964525 -7.071068e-01 -0.707107         0.0         1.0        0.5   0.866025
+4   3917 -8.660254e-01 -0.500000  0.264684  0.964335 -8.660254e-01 -0.500000         0.0         1.0        0.5   0.866025
+[ 2025-01-07 08:20:13,911 ] 72 root - INFO - train_df.shape:(17892, 11), test_df.shape: (4602, 11),val_df.shape: (3067, 11)
+[ 2025-01-07 08:20:13,912 ] 73 root - INFO - train cols:Index(['value', 'Day sin', 'Day cos', 'Year sin', 'Year cos', 'Hour sin',
+       'Hour cos', 'Minute sin', 'Minute cos', 'Month sin', 'Month cos'],
+      dtype='object'),test cols: Index(['value', 'Day sin', 'Day cos', 'Year sin', 'Year cos', 'Hour sin',
+       'Hour cos', 'Minute sin', 'Minute cos', 'Month sin', 'Month cos'],
+      dtype='object'),val cols: Index(['value', 'Day sin', 'Day cos', 'Year sin', 'Year cos', 'Hour sin',
+       'Hour cos', 'Minute sin', 'Minute cos', 'Month sin', 'Month cos'],
+      dtype='object')
+[ 2025-01-07 08:20:13,912 ] 74 root - INFO - splitting the dataframes into input and target dataframes.
+[ 2025-01-07 08:20:13,944 ] 192 root - INFO - Shapes - X: (17889, 3, 11), y: (17889,)
+[ 2025-01-07 08:20:13,944 ] 193 root - INFO - First 2 samples of X:
+[ 2025-01-07 08:20:13,944 ] 194 root - INFO - [[[ 3.96200000e+03 -8.65229893e-12  1.00000000e+00  6.70903273e-03
+    9.99977494e-01  0.00000000e+00  1.00000000e+00  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]
+  [ 3.97000000e+03  2.58819045e-01  9.65925826e-01  7.42579719e-03
+    9.99972428e-01  2.58819045e-01  9.65925826e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]
+  [ 3.96300000e+03  5.00000000e-01  8.66025404e-01  8.14255784e-03
+    9.99966849e-01  5.00000000e-01  8.66025404e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]]
+
+ [[ 3.97000000e+03  2.58819045e-01  9.65925826e-01  7.42579719e-03
+    9.99972428e-01  2.58819045e-01  9.65925826e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]
+  [ 3.96300000e+03  5.00000000e-01  8.66025404e-01  8.14255784e-03
+    9.99966849e-01  5.00000000e-01  8.66025404e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]
+  [ 3.75000000e+03  7.07106781e-01  7.07106781e-01  8.85931430e-03
+    9.99960756e-01  7.07106781e-01  7.07106781e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]]]
+[ 2025-01-07 08:20:13,946 ] 195 root - INFO - 
+First 2 samples of y:
+[ 2025-01-07 08:20:13,946 ] 196 root - INFO - [3750. 3513.]
+[ 2025-01-07 08:20:13,954 ] 192 root - INFO - Shapes - X: (4599, 3, 11), y: (4599,)
+[ 2025-01-07 08:20:13,954 ] 193 root - INFO - First 2 samples of X:
+[ 2025-01-07 08:20:13,955 ] 194 root - INFO - [[[ 2.29000000e+03  9.65925826e-01 -2.58819045e-01  6.27401968e-01
+   -7.78695557e-01  9.65925826e-01 -2.58819045e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01 -8.66025404e-01]
+  [ 2.25300000e+03  8.66025404e-01 -5.00000000e-01  6.26843651e-01
+   -7.79145068e-01  8.66025404e-01 -5.00000000e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01 -8.66025404e-01]
+  [ 2.25800000e+03  7.07106781e-01 -7.07106781e-01  6.26285013e-01
+   -7.79594178e-01  7.07106781e-01 -7.07106781e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01 -8.66025404e-01]]
+
+ [[ 2.25300000e+03  8.66025404e-01 -5.00000000e-01  6.26843651e-01
+   -7.79145068e-01  8.66025404e-01 -5.00000000e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01 -8.66025404e-01]
+  [ 2.25800000e+03  7.07106781e-01 -7.07106781e-01  6.26285013e-01
+   -7.79594178e-01  7.07106781e-01 -7.07106781e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01 -8.66025404e-01]
+  [ 2.43000000e+03  5.00000000e-01 -8.66025404e-01  6.25726053e-01
+   -7.80042888e-01  5.00000000e-01 -8.66025404e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01 -8.66025404e-01]]]
+[ 2025-01-07 08:20:13,955 ] 195 root - INFO - 
+First 2 samples of y:
+[ 2025-01-07 08:20:13,956 ] 196 root - INFO - [2430. 2465.]
+[ 2025-01-07 08:20:13,961 ] 192 root - INFO - Shapes - X: (3064, 3, 11), y: (3064,)
+[ 2025-01-07 08:20:13,962 ] 193 root - INFO - First 2 samples of X:
+[ 2025-01-07 08:20:13,962 ] 194 root - INFO - [[[ 3.03000000e+03 -1.76285113e-12 -1.00000000e+00  2.61917743e-01
+    9.65090201e-01  1.22464680e-16 -1.00000000e+00  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]
+  [ 3.71800000e+03 -2.58819045e-01 -9.65925826e-01  2.62609435e-01
+    9.64902215e-01 -2.58819045e-01 -9.65925826e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]
+  [ 3.77000000e+03 -5.00000000e-01 -8.66025404e-01  2.63300992e-01
+    9.64713733e-01 -5.00000000e-01 -8.66025404e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]]
+
+ [[ 3.71800000e+03 -2.58819045e-01 -9.65925826e-01  2.62609435e-01
+    9.64902215e-01 -2.58819045e-01 -9.65925826e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]
+  [ 3.77000000e+03 -5.00000000e-01 -8.66025404e-01  2.63300992e-01
+    9.64713733e-01 -5.00000000e-01 -8.66025404e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]
+  [ 3.78500000e+03 -7.07106781e-01 -7.07106781e-01  2.63992414e-01
+    9.64524756e-01 -7.07106781e-01 -7.07106781e-01  0.00000000e+00
+    1.00000000e+00  5.00000000e-01  8.66025404e-01]]]
+[ 2025-01-07 08:20:13,963 ] 195 root - INFO - 
+First 2 samples of y:
+[ 2025-01-07 08:20:13,963 ] 196 root - INFO - [3785. 3917.]
+[ 2025-01-07 08:20:13,963 ] 79 root - INFO - X_train.shape:(17889, 3, 11), X_test.shape:(4599, 3, 11), X_val.shape:(3064, 3, 11)
+[ 2025-01-07 08:20:13,963 ] 80 root - INFO - y_train.shape:(17889,), y_test.shape:(4599,), y_val.shape:(3064,)
+[ 2025-01-07 08:20:13,965 ] 86 root - INFO - Printing First 5 elements:
+[ 2025-01-07 08:20:13,966 ] 87 root - INFO - y_train_scaled: [[0.64296046]
+ [0.58582449]
+ [0.47082932]
+ [0.33751205]
+ [0.30641273]], y_val_scaled: [[0.65139826]
+ [0.68322083]
+ [0.67622951]
+ [0.66248795]
+ [0.68177435]], y_test_scaled: [[0.32473481]
+ [0.33317261]
+ [0.41899711]
+ [0.41972035]
+ [0.42454195]]
+[ 2025-01-07 08:20:13,966 ] 88 root - INFO - Printing shapes:
+[ 2025-01-07 08:20:13,966 ] 89 root - INFO - y_train_scaled: (17889, 1), y_val_scaled: (3064, 1), y_test_scaled: (4599, 1)
+[ 2025-01-07 08:20:13,966 ] 85 root - INFO - Entered the save_object method of Main utils class
+[ 2025-01-07 08:20:13,989 ] 89 root - INFO - Completed saving the scaling object.
+[ 2025-01-07 08:20:13,989 ] 85 root - INFO - Entered the save_object method of Main utils class
+[ 2025-01-07 08:20:13,989 ] 89 root - INFO - Completed saving the scaling object.
+[ 2025-01-07 08:20:14,017 ] 102 root - INFO - saved numpy arrays in the path.
+[ 2025-01-07 08:20:14,017 ] 39 root - INFO - Data Transformation Completed.
+[ 2025-01-07 08:20:14,017 ] 45 root - INFO - Initiating Model training.
+[ 2025-01-07 08:20:14,017 ] 84 root - INFO - Loading transformed data...
+[ 2025-01-07 08:20:14,021 ] 91 root - INFO - Data shapes - X_train: (17889, 3, 11), y_train: (17889, 1), X_val: (3064, 3, 11), y_val: (3064, 1), X_test: (4599, 3, 11), y_test: (4599, 1)
+[ 2025-01-07 08:20:14,021 ] 94 root - INFO - Building the model.
+[ 2025-01-07 08:20:14,345 ] 56 root - INFO - LSTM model built successfully.
+[ 2025-01-07 08:20:14,345 ] 97 root - INFO - Starting model training.
+[ 2025-01-07 08:20:14,346 ] 88 root - INFO - Starting LSTM model training...
+[ 2025-01-07 08:24:24,374 ] 97 root - INFO - LSTM model training completed.
+[ 2025-01-07 08:24:24,375 ] 85 root - INFO - Entered the save_object method of Main utils class
+[ 2025-01-07 08:24:24,483 ] 89 root - INFO - Completed saving the scaling object.
+[ 2025-01-07 08:24:24,484 ] 104 root - INFO - Making Predictions with the model.
+[ 2025-01-07 08:24:24,484 ] 114 root - INFO - Generating predictions using the LSTM model.
+[ 2025-01-07 08:24:25,895 ] 118 root - INFO - Predictions generated and rescaled successfully.
+[ 2025-01-07 08:24:25,895 ] 114 root - INFO - Generating predictions using the LSTM model.
+[ 2025-01-07 08:24:28,557 ] 118 root - INFO - Predictions generated and rescaled successfully.
+[ 2025-01-07 08:24:28,558 ] 114 root - INFO - Generating predictions using the LSTM model.
+[ 2025-01-07 08:24:29,083 ] 118 root - INFO - Predictions generated and rescaled successfully.
+[ 2025-01-07 08:24:29,083 ] 108 root - INFO - Predictions shapes - y_pred_test: (4599,), y_pred_train: (17889,), y_pred_val: (3064,)
+[ 2025-01-07 08:24:29,086 ] 119 root - INFO - Predictions shapes - y_pred_test_rescaled: (4599,), y_pred_train_rescaled: (17889,), y_pred_val_rescaled: (3064,)
+[ 2025-01-07 08:24:29,087 ] 120 root - INFO - Predictions shapes - y_test_rescaled: (4599,), y_train_rescaled: (17889,), y_val_rescaled: (3064,)
+[ 2025-01-07 08:24:29,087 ] 121 root - INFO - First 5 rescaled predictions and true values:
+[ 2025-01-07 08:24:29,088 ] 122 root - INFO - y_pred_test_rescaled[:5]: [2432.83   2650.1287 2691.2751 3110.4321 3039.8755]
+[ 2025-01-07 08:24:29,088 ] 123 root - INFO - y_test_rescaled[:5]: [2430. 2465. 2821. 2824. 2844.]
+[ 2025-01-07 08:24:29,088 ] 124 root - INFO - y_pred_train_rescaled[:5]: [3796.5605 3560.3582 3323.7764 2814.6487 2349.9146]
+[ 2025-01-07 08:24:29,089 ] 125 root - INFO - y_train_rescaled[:5]: [3750. 3513. 3036. 2483. 2354.]
+[ 2025-01-07 08:24:29,089 ] 126 root - INFO - y_pred_val_rescaled[:5]: [3784.2056 3795.5093 3913.2358 3867.7915 3827.2004]
+[ 2025-01-07 08:24:29,089 ] 127 root - INFO - y_val_rescaled[:5]: [3785. 3917. 3888. 3831. 3911.]
+[ 2025-01-07 08:24:29,090 ] 129 root - INFO - Calculating model evaluation metrics...
+[ 2025-01-07 08:24:29,097 ] 133 root - INFO - Model Test evaluation metrics: RegressionMetricArtifact(mae=151.13687158341148, mse=40223.85063604448, rmse=np.float64(200.5588458184891), r2=0.8953868325574718)
+[ 2025-01-07 08:24:29,098 ] 134 root - INFO - Model Train evaluation metrics: RegressionMetricArtifact(mae=149.18788559725076, mse=37873.28496442521, rmse=np.float64(194.6105982839198), r2=0.9024464583937062)
+[ 2025-01-07 08:24:29,098 ] 135 root - INFO - Model Val evaluation metrics: RegressionMetricArtifact(mae=125.68451350040286, mse=28193.200145198593, rmse=np.float64(167.90830874378608), r2=0.8958954183286179)
+[ 2025-01-07 08:24:36,666 ] 114 root - INFO - Generating predictions using the LSTM model.
+[ 2025-01-07 08:24:36,845 ] 118 root - INFO - Predictions generated and rescaled successfully.
+[ 2025-01-07 08:25:14,418 ] 85 root - INFO - Entered the save_object method of Main utils class
+[ 2025-01-07 08:25:14,530 ] 89 root - INFO - Completed saving the scaling object.
+[ 2025-01-07 08:25:14,531 ] 47 root - INFO - Model training completed.
