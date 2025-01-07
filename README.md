@@ -1,4 +1,4 @@
-# Energy Generation Predictor - MLops
+# Energy Generation Predictor - MLops⚡
 
 ![assets/Project Architecture.gif](assets/project_architecture.gif)
 
@@ -7,10 +7,10 @@ This repository contains a comprehensive end-to-end MLOps project focused on pre
 ## Introduction
 Hydro energy generation is a vital component of New York City's renewable energy infrastructure. Accurate predictions of energy output are crucial for efficient energy management, enabling better planning and distribution. This project utilizes historical hydro energy data to develop a machine learning model that can forecast future energy generation, providing valuable insights for energy providers and city planners.
 
-## Objective
+## Objective 🎯
 The objective of this project is to build an end-to-end machine learning pipeline to predict hydro energy generation in New York City. The project implements MLOps principles to automate the entire workflow from data ingestion to deployment using cloud services and CI/CD pipelines.
 
-## Problem Statement
+## Problem Statement 🔍
 Hydro energy generation is subject to various environmental factors, and accurate predictions are essential for optimizing energy generation, distribution and management. This project aims to create a robust prediction model using historical hydro energy generation data and deploy it in a scalable, automated environment that supports continuous integration and deployment.
 
 ## Tech Stack 🛠️
@@ -29,33 +29,37 @@ Hydro energy generation is subject to various environmental factors, and accurat
 | Container Registry    | AWS ECR               | Stores Docker images for deployment                             |
 | Deployment            | AWS EC2               | Self-hosted runner for GitHub Actions, enabling deployment      |
  
-## Training Pipeline Stages
+## Training Pipeline Stages 📊
 
 ![assets/Training Pipeline.gif](assets/training_pipeline.gif)
 
 The training pipeline for the Energy Generation Predictor project is organized into several key stages. Each stage is designed to process the data, validate it, transform it, and finally train the model. Below is a breakdown of the pipeline stages:
 
-1. **Data Ingestion**
+1. **Data Ingestion**📥
 
 This is the first stage of training pipeline, where hydro energy generation data from a MongoDB database, cleans it and converts it into a Pandas DataFrame. The data is then split into training (70%), validation (12%), and test (18%) sets. The output is a DataIngestionArtifact containing file paths to these datasets, ready for the next pipeline stage.
  
 ![assets/Mongodb.png](assets/mongodb.png)
 
-2. **Data Validation**
+2. **Data Validation**✔️
   
 This stage ensures data integrity by verifying column counts and required numerical and datetime columns. It detects data drift between base and current datasets using statistical tests. Validated datasets are saved, and a DataValidationArtifact is produced with paths to the validated data and a drift report.
 
-3. **Data Transformation**
+3. **Data Transformation**🔄
 
 This stage reads validated hydro energy generation data, applies cyclic feature transformation, scales the target variable using MinMaxScaler, and splits the data into inputs and targets for model training. The transformed data and scaler are saved, producing a DataTransformationArtifact with paths to the processed datasets, ready for further pipeline stages.
 
-4. **Model Training and evaluation**
+4. **Model Training and evaluation**🤖
 
 This stage handles the training and evaluation of machine learning models. The experiments and metric artifacts are tracked using mlflow and dagshub. The final trained model and metrics are saved as artifacts, ensuring a structured workflow from data transformation to model deployment.
 
 - **Experiment Tracking**
 
-![assets/Dagshub.png](assets/dagshub.png)
+   ![assets/Dagshub.png](assets/dagshub.png)
+
+   ![assets/mflow1.png](assets/mflow1.png) 
+
+   ![assets/mflow2.png](assets/mflow2.png) 
 
 - To run the training pipeline:
 ```bash
@@ -63,7 +67,7 @@ python run_pipeline.py
 ```
 ## CI/CD workflow - Github actions
 
-GitHub Actions is leveraged to implement a robust CI/CD pipeline, automating the processes of Continuous Integration (CI), Continuous Delivery (CD), and Continuous Deployment (CD). This steps help maintain code quality and catch potential issues early in the development cycle.
+GitHub Actions is leveraged to implement a robust CI/CD pipeline, automating the processes of Continuous Integration (CI), Continuous Delivery (CD), and Continuous Deployment (CD). This steps help maintain code quality and catch potential issues early in the development cycle. By using a self-hosted runner, GitHub Actions automatically listens for new jobs and triggers deployment whenever code is pushed to the repository. This ensures that the latest code changes are tested, built, and deployed seamlessly, reducing manual intervention and enhancing the efficiency of the development process.
 
 ![assets/Github Actions.png](assets/github_actions.png)
 
@@ -113,8 +117,7 @@ uvicorn app:app --reload
 - **To run fastapi app on cloud**: Create AWS ECR, EC2 instance, setup github actions and run below code.
 ```bash
 python app.py
-```
-
+``` 
 - **API Routes**
    - **Train route**: The `/train` route is a crucial endpoint designed to initiate the training process of the machine learning model. When a POST request is sent to this route, it triggers the model to start training using the predefined dataset and parameters. This route is particularly useful for retraining the model, whether to improve its accuracy or to incorporate new data. By using this route, you can ensure that your model stays updated and performs optimally.
 
@@ -124,7 +127,18 @@ python app.py
 
    ![assets/Fastapi Predict route.png](assets/predict_route.png)
  
-### Installation
+## How to Run the Project 🚀
+This section provides a step-by-step guide on how to set up and run the Malicious URL Detection project both locally and in a deployed environment.
+
+### Pre-requisites
+- Docker
+- MongoDB
+- Python 3.8+
+- Dagshub account
+- Cloud account (AWS/GCP/Azure)
+- GitHub Actions setup
+
+### Local step 🔧
 1. **Clone the repository**
 ```bash
    git clone https://github.com/your-username/Energy-Generation-Predictor-MLops.git
@@ -148,3 +162,12 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
+
+### Contact 📫
+For any questions, suggestions, or collaboration opportunities, feel free to reach out:
+
+📧Email: ponnakrishnaveni76@gmail.com 
+
+🌐 LinkedIn: [Krishnaveni Ponna](www.linkedin.com/in/krishnaveni-ponna-28ab93239)
+
+🐦 Twitter: [@Krishnaveni076](https://x.com/Krishnaveni076)
