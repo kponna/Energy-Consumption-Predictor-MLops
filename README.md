@@ -72,15 +72,21 @@ GitHub Actions is leveraged to implement a robust CI/CD pipeline, automating the
 ![assets/Github Actions.png](assets/github_actions.png)
 
 1. **Continuous Integration**
+
 GitHub Actions automatically runs on every push to the main branch, excluding updates to the README.md file. This phase ensures the integrity of the code by executing essential tasks such as checking out the repository, linting the code, and running unit tests.
+
 2. **Continuous Delivery**
+
 GitHub Actions takes the successfully integrated code and prepares it for deployment. This phase is triggered after the CI steps pass. It includes building a Docker image of the application, logging into Amazon ECR, and pushing the image to the ECR repository. This automated process simplifies the transition from development to production-ready code.
+
 3. **Continuous Deployment**
+
 GitHub Actions automatically deploys the newly built Docker image to a self-hosted environment. This phase pulls the latest Docker image from Amazon ECR, runs the image to serve users, and cleans up old Docker images and containers. This ensures that the latest version of the application is always deployed and operational, reducing manual intervention and accelerating the release cycle.
  
 In this workflow, various AWS services, such as S3, ECR, EC2, and FastAPI, are integrated to deploy an application that provides batch predictions using FastAPI as the user interface.
 
 1. **AWS S3:**
+
 - S3 is used to store artifacts generated in each stages of the training pipeline. These artifacts include model checkpoints, training logs, and datasets, ensuring they are securely stored and easily accessible for further processing or evaluation.
 
 - Artifacts are pushed to S3, creating a versioned storage system that allows for tracking the progress and results of each training iteration.
