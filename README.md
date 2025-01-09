@@ -88,7 +88,6 @@ In this workflow, various AWS services, such as S3, ECR, EC2, and FastAPI, are i
 1. **AWS S3:**
 
 - S3 is used to store artifacts generated in each stages of the training pipeline. These artifacts include model checkpoints, training logs, and datasets, ensuring they are securely stored and easily accessible for further processing or evaluation.
-
 - Artifacts are pushed to S3, creating a versioned storage system that allows for tracking the progress and results of each training iteration.
 
 ![assets/AWS s3 Bucket.png](assets/s3_bucket.png)
