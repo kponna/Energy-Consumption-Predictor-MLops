@@ -131,9 +131,6 @@ python app.py
    - **Predict route**: The `/predict` route serves the purpose of making batch predictions using the trained model. It also accepts POST requests, but the input must be a .csv file containing the data you wish to predict on. Upon receiving the file, the route processes the input data, utilizes the trained model to generate predictions, and then returns the results in json. This route is ideal for applying the model to new datasets, enabling efficient and large-scale prediction tasks.
 
    ![assets/Fastapi Predict route.png](assets/predict_route.png)
- 
-## How to Run the Project 🚀
-This section provides a step-by-step guide on how to set up and run the Malicious URL Detection project both locally and in a deployed environment.
 
 ### Pre-requisites
 - Docker
