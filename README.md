@@ -143,7 +143,7 @@ python app.py
 ### Local step 🔧
 1. **Clone the repository**
 ```bash
-   git clone https://github.com/your-username/Energy-Generation-Predictor-MLops.git
+   git clone https://github.com/kponna/Energy-Generation-Predictor-MLops.git
    cd Energy-Generation-Predictor-MLops 
 ``` 
 2. **Set Up a Virtual Environment**:
